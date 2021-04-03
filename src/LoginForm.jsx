@@ -100,7 +100,7 @@ class LoginForm extends React.Component {
   };
 
   componentWillUnmount = () => {
-    this._cleanup();
+    this._cleanup().then(() => console.log('cleanup complete'))
   }
 
   _notification = (message, description) => {
@@ -130,8 +130,8 @@ class LoginForm extends React.Component {
   };
 
   _cleanup = async () => {
-    if (testUpdateLoop)
-      clearInterval(testUpdateLoop);
+    if (this.testUpdateLoop)
+      clearInterval(this.testUpdateLoop);
     if (this.stream) {
       await this._stopMediaStream(this.stream);
       await this.stream.unpublish();
@@ -144,13 +144,7 @@ class LoginForm extends React.Component {
     this.setState({test: true})
     this._testStep('biz', 'pending');
     let client = this.props.createClient();
-    let testUpdateLoop = null;
 
-
-    window.onunload = () => {
-      cleanup()
-    }
-    
     client.on("transport-open", async () => {
       this._testStep('biz', 'connected', client.url);
       this._testStep('lobby', 'pending');
@@ -178,7 +172,7 @@ class LoginForm extends React.Component {
           trySubscribe();
         }
       };
-      testUpdateLoop = setInterval(testConnectionUpdateLoop, 3000);
+      this.testUpdateLoop = setInterval(testConnectionUpdateLoop, 3000);
       setTimeout(testConnectionUpdateLoop, 150);
 
       const trySubscribe = async () => {
