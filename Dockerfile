@@ -22,7 +22,7 @@ RUN npm run build
 
 # Serve dist
 
-FROM caddy:2.1.1-alpine
+FROM caddy:2.4.3-alpine
 ENV ENABLE_TELEMETRY="false"
 #ENV WWW_URL=""
 #ENV ADMIN_EMAIL=""
